@@ -1,3 +1,5 @@
+import TicketPriorityBadge from "@/components/TicketPriorityBadge";
+import TicketStatusBadge from "@/components/TicketStatusBadge";
 import {
   Table,
   TableBody,
@@ -32,9 +34,21 @@ const DataTable = ({ tickets }: Props) => {
               tickets.map((t) => (
                 <TableRow key={t.id}>
                   <TableCell>{t.title}</TableCell>
-                  <TableCell>{t.status}</TableCell>
-                  <TableCell>{t.priority}</TableCell>
-                  <TableCell>{t.createdAt.toDateString()}</TableCell>
+                  <TableCell>
+                    <TicketStatusBadge status={t.status} />
+                  </TableCell>
+                  <TableCell>
+                    <TicketPriorityBadge priority={t.priority} />
+                  </TableCell>
+                  <TableCell>
+                    {t.createdAt.toLocaleDateString("en-US", {
+                      year: "2-digit",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })}
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
