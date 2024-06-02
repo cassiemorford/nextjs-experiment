@@ -11,14 +11,23 @@ import {
 import { Ticket } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
+import { ArrowDown } from "lucide-react";
+import { SearchParams } from "./page";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   tickets: Ticket[];
+  searchParams: SearchParams;
 }
 
-const headers = ["Title", "Status", "Priority", "Created At"];
+const headers = [
+  { displayValue: "Title", dbValue: "title" },
+  { displayValue: "Status", dbValue: "status" },
+  { displayValue: "Priority", dbValue: "priority" },
+  { displayValue: "Created At", dbValue: "createdAt" },
+];
 
-const DataTable = ({ tickets }: Props) => {
+const DataTable = ({ tickets, searchParams }: Props) => {
   return (
     <div className="w-full mt-5">
       <div className="rounded-md sm:border">
@@ -26,7 +35,16 @@ const DataTable = ({ tickets }: Props) => {
           <TableHeader>
             <TableRow>
               {headers.map((h) => (
-                <TableHead>{h}</TableHead>
+                <TableHead>
+                  <Link
+                    href={{ query: { ...searchParams, orderBy: h.dbValue } }}
+                  >
+                    {h.displayValue}
+                    {searchParams.orderBy === h.dbValue && (
+                      <ArrowDown className="inline p-1" />
+                    )}
+                  </Link>
+                </TableHead>
               ))}
             </TableRow>
           </TableHeader>
