@@ -43,7 +43,8 @@ const UserForm = ({ user }: Props) => {
         await axios.post("/api/users", values);
       }
       setIsSubmitting(false);
-      router.push("/tickets");
+      router.push("/users");
+      router.refresh();
     } catch (error) {
       setIsSubmitting(false);
     }

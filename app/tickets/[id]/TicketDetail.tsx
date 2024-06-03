@@ -9,19 +9,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Ticket } from "@prisma/client";
+import { Ticket, User } from "@prisma/client";
 import Link from "next/link";
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import DeleteButton from "./DeleteButton";
-import { useRouter } from "next/navigation";
-import axios from "axios";
+import UserSelect from "@/components/UserSelect";
 
 interface Props {
   ticket: Ticket;
+  users: User[];
 }
 
-const TicketDetail = ({ ticket }: Props) => {
+const TicketDetail = ({ ticket, users }: Props) => {
   return (
     <div className="lg:grid lg:grid-cols-4">
       <Card className="mx-4 mb-4 lg:col-span-3 lg:mr-4 min-h-72">
@@ -40,6 +40,7 @@ const TicketDetail = ({ ticket }: Props) => {
         </CardHeader>
       </Card>
       <div className="mx-4 flex lg:flex-col lg:mx-0 gap-2">
+        <UserSelect ticket={ticket} users={users} />
         <Link
           href={`/tickets/edit/${ticket.id}`}
           className={`mt-8 ${buttonVariants({ variant: "default" })}`}
