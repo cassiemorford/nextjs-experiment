@@ -29,7 +29,6 @@ interface Props {
 
 const TicketForm = ({ ticket }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState("");
   const router = useRouter();
 
   const form = useForm<TicketFormData>({
@@ -40,7 +39,6 @@ const TicketForm = ({ ticket }: Props) => {
     console.log("submit");
     try {
       setIsSubmitting(true);
-      setError("");
       if (ticket) {
         await axios.patch(`/api/tickets/${ticket.id}`, values);
       } else {
@@ -49,7 +47,6 @@ const TicketForm = ({ ticket }: Props) => {
       setIsSubmitting(false);
       router.push("/tickets");
     } catch (error) {
-      setError("unknown error occured");
       setIsSubmitting(false);
     }
   }
