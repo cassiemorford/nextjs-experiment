@@ -36,7 +36,6 @@ const TicketForm = ({ ticket }: Props) => {
   });
 
   async function onSubmit(values: z.infer<typeof ticketSchema>) {
-    console.log("submit");
     try {
       setIsSubmitting(true);
       if (ticket) {

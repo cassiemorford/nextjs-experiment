@@ -2,12 +2,24 @@ import prisma from "@/prisma/db";
 import { userSchema } from "@/validationSchemas/users";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { getServerSession } from "next-auth";
+import options from "../../auth/[...nextauth]/options";
+import { Role } from "@prisma/client";
 
 interface Props {
   params: { id: string };
 }
 
 export async function PATCH(request: NextRequest, { params }: Props) {
+  const session = await getServerSession(options);
+
+  if (!session || session.user.role !== Role.ADMIN) {
+    return NextResponse.json(
+      { error: "User does not have the permissions to update a user" },
+      { status: 401 }
+    );
+  }
+
   const body = await request.json();
   const validation = userSchema.safeParse(body);
 
@@ -51,6 +63,14 @@ export async function PATCH(request: NextRequest, { params }: Props) {
 }
 
 export async function DELETE(request: NextRequest, { params }: Props) {
+  const session = await getServerSession(options);
+
+  if (!session || session.user.role !== Role.ADMIN) {
+    return NextResponse.json(
+      { error: "User does not have the permissions to delete a user" },
+      { status: 401 }
+    );
+  }
   const user = await prisma.user.findUnique({
     where: { id: parseInt(params.id) },
   });
